@@ -17,8 +17,28 @@
         align-items: center;
         height: 100vh;
         flex-direction: column;
+        position: relative;
     }
-    input {
+    .wave {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="%2300FF00" fill-opacity="0.1" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+        background-size: 1440px 320px;
+        animation: wave 10s linear infinite;
+        z-index: -1;
+    }
+    @keyframes wave {
+        0% {
+            background-position-x: 0;
+        }
+        100% {
+            background-position-x: 1440px;
+        }
+    }
+    input, button {
         margin: 10px;
         padding: 10px;
         font-size: 16px;
@@ -29,15 +49,7 @@
         width: 200px;
     }
     button {
-        margin: 10px;
-        padding: 10px;
-        font-size: 16px;
-        background-color: #000;
-        color: #00FF00;
-        border: 1px solid #00FF00;
-        border-radius: 5px;
         cursor: pointer;
-        width: 200px;
     }
     .results {
         margin-top: 20px;
@@ -103,12 +115,38 @@
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
+    .supply-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+    .supply-control button {
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+        padding: 0;
+        margin: 0 10px;
+    }
+    #supplyPercentage {
+        font-size: 18px;
+    }
+    .start-trading {
+        margin-top: 20px;
+    }
 </style>
 </head>
 <body>
+    <div class="wave"></div>
     <h1>Polynomial Points Checker</h1>
     <input type="number" id="userPoints" placeholder="Enter your points" value="10000">
     <button onclick="calculateValues()">Check Value</button>
+    
+    <div class="supply-control">
+        <button onclick="changeSupplyPercentage(-1)">-</button>
+        <span id="supplyPercentage">2.5%</span>
+        <button onclick="changeSupplyPercentage(1)">+</button>
+    </div>
     
     <div class="results" id="results">
         <p id="circulationPoints">Current Circulation Points: </p>
@@ -127,11 +165,13 @@
             </table>
         </div>
     </div>
+    <button class="start-trading" onclick="window.open('https://polynomial.fi/trade', '_blank')">Start Trading</button>
 <script>
     const initialPoints = 10000000; // 10 million
     const dailyIncrement = 1000000;
     const totalTokenSupply = 1000000000;  // 1 billion tokens
-    const tokenSupplyForTradingPoints = 0.025 * totalTokenSupply;  // 2.5% of total supply = 25 million tokens
+    let supplyPercentage = 2.5;  // Initial percentage
+    let tokenSupplyForTradingPoints = (supplyPercentage / 100) * totalTokenSupply;
     const valuations = [50000000, 75000000, 100000000, 250000000, 500000000, 1000000000, 2000000000];
     const startTime = new Date().setUTCHours(14, 0, 0, 0); // Today at 2 PM UTC
 
@@ -163,6 +203,13 @@
                 `$${(valuation / 1000000).toFixed(0)}M`;
             valueCell.textContent = `$${dollarValue.toFixed(2)}`;
         });
+    }
+
+    function changeSupplyPercentage(change) {
+        supplyPercentage = Math.max(0.1, Math.min(100, supplyPercentage + change));
+        tokenSupplyForTradingPoints = (supplyPercentage / 100) * totalTokenSupply;
+        document.getElementById('supplyPercentage').textContent = supplyPercentage.toFixed(1) + '%';
+        calculateValues();
     }
 
     function createSnowflakes(num) {
