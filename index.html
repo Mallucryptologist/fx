@@ -4,127 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Polynomial Points Checker</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-            color: #00FF00;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
-        }
-        input {
-            margin: 10px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #333;
-            color: #00FF00;
-            border: 1px solid #00FF00;
-            border-radius: 5px;
-            width: 200px;
-        }
-        button {
-            margin: 10px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #333;
-            color: #00FF00;
-            border: 1px solid #00FF00;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 200px;
-        }
-        .results {
-            margin-top: 20px;
-            text-align: left;
-            padding: 0 20px;
-        }
-        .results p {
-            margin: 5px 0;
-        }
-        .snowflake {
-            position: fixed;
-            top: -10px;
-            width: 12px;
-            height: 12px;
-            background-color: #FFF;
-            border-radius: 50%;
-            animation: fall 5s linear infinite;
-            opacity: 0.8;
-        }
-        @keyframes fall {
-            to {
-                transform: translateY(100vh);
-                opacity: 0;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Polynomial Points Checker</h1>
+    <p id="currentPoints">Current Points: </p>
     <input type="number" id="userPoints" placeholder="Enter your points" value="10000">
     <button onclick="calculateValues()">Check Value</button>
     
     <div class="results" id="results">
         <p id="circulationPoints">Current Circulation Points: </p>
+        <table id="valuationTable">
+            <thead>
+                <tr>
+                    <th>Valuation</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Valuation rows will be inserted here -->
+            </tbody>
+        </table>
     </div>
 
-    <script>
-        const initialPoints = 9000000;
-        const dailyIncrement = 1000000;
-        const totalTokenSupply = 1000000000;  // 1 billion tokens
-        const tokenSupplyForTradingPoints = 0.025 * totalTokenSupply;  // 2.5% of total supply = 25 million tokens
-        const valuations = [50000000, 75000000, 100000000, 250000000, 500000000, 1000000000, 2000000000];
-        const startTime = new Date().setUTCHours(14, 0, 0, 0); // 2 PM UTC start time
-
-        // Function to calculate the total points based on days passed
-        function updateCurrentPoints() {
-            const now = new Date();
-            const daysPassed = Math.floor((now - startTime) / (24 * 60 * 60 * 1000));
-            return initialPoints + (daysPassed * dailyIncrement);
-        }
-
-        // Function to calculate and display the dollar value of points at different valuations
-        function calculateValues() {
-            const userPoints = document.getElementById('userPoints').value;
-            const currentTotalPoints = updateCurrentPoints();
-            const circulationPointsElement = document.getElementById('circulationPoints');
-            
-            circulationPointsElement.textContent = `Current Circulation Points: ${currentTotalPoints}`;
-
-            let resultHTML = `<p>Your Points: ${userPoints}</p>`;
-            
-            valuations.forEach(valuation => {
-                // User's token allocation
-                const userTokenAllocation = (userPoints / currentTotalPoints) * tokenSupplyForTradingPoints;
-                // Dollar value based on valuation
-                const dollarValue = (userTokenAllocation / totalTokenSupply) * valuation;
-                resultHTML += `<p>At $${(valuation / 1000000).toFixed(0)}M valuation: $${dollarValue.toFixed(2)}</p>`;
-            });
-            
-            document.getElementById('results').innerHTML += resultHTML;
-        }
-
-        // Function to create snowflake animation
-        function createSnowflakes(num) {
-            for (let i = 0; i < num; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                snowflake.style.left = `${Math.random() * 100}vw`;
-                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
-                snowflake.style.animationDelay = `${Math.random() * 5}s`;
-                document.body.appendChild(snowflake);
-            }
-        }
-
-        createSnowflakes(50);
-        updateCurrentPoints(); // Update points immediately on load
-        calculateValues(); // Automatically calculate values on load
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
