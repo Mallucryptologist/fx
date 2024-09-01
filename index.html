@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Polynomial Points Checker</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polynomial Points Checker</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Polynomial Points Checker</h1>
+    <h1>Polynomial Points Checker</h1>
+    <input type="number" id="userPoints" placeholder="Enter your points" value="10000">
+    <button onclick="calculateValues()">Check Value</button>
+    
+    <div class="results" id="results">
+        <p id="circulationPoints">Current Circulation Points: </p>
+    </div>
 
-  <div class="points-container">
-    <label for="myPoints">Enter your points:</label>
-    <input type="number" id="myPoints" name="myPoints">
-
-    <button onclick="calculateValue()">Calculate Value</button>
-  </div>
-
-  <div id="result"></div>
-
-  <div id="circulationPoints"></div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
