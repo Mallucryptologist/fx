@@ -1,0 +1,9 @@
+body {
+  background-color: black;
+  color: green;
+  font-family: sans-serif;
+}
+
+.points-container {
+  margin-bottom: 20px;
+}
