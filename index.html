@@ -4,21 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Polynomial Points Checker</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ... (previous styles remain the same) ... */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #00FF00;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+        }
+        @keyframes neonGlow {
+            0% { box-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00; }
+            50% { box-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00; }
+            100% { box-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00; }
+        }
+        table {
+            animation: neonGlow 2s infinite;
+        }
+    </style>
 </head>
 <body>
     <h1>Polynomial Points Checker</h1>
-    <p id="currentPoints">Current Points: </p>
     <input type="number" id="userPoints" placeholder="Enter your points" value="10000">
     <button onclick="calculateValues()">Check Value</button>
     
     <div class="results" id="results">
         <p id="circulationPoints">Current Circulation Points: </p>
+        <p id="userPointsDisplay">Your Points: </p>
         <table id="valuationTable">
             <thead>
                 <tr>
                     <th>Valuation</th>
-                    <th>Value</th>
+                    <th>Your Value</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +50,58 @@
         </table>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const initialPoints = 9000000;
+        const dailyIncrement = 1000000;
+        const totalTokenSupply = 1000000000;  // 1 billion tokens
+        const tokenSupplyForTradingPoints = 0.025 * totalTokenSupply;  // 2.5% of total supply = 25 million tokens
+        const valuations = [50000000, 75000000, 100000000, 250000000, 500000000, 1000000000, 2000000000];
+        const startTime = new Date().setUTCHours(14, 0, 0, 0); // 2 PM UTC start time
+
+        function updateCurrentPoints() {
+            const now = new Date();
+            const daysPassed = Math.floor((now - startTime) / (24 * 60 * 60 * 1000));
+            return initialPoints + (daysPassed * dailyIncrement);
+        }
+
+        function calculateValues() {
+            const userPoints = document.getElementById('userPoints').value;
+            const currentTotalPoints = updateCurrentPoints();
+            
+            document.getElementById('circulationPoints').textContent = `Current Circulation Points: ${currentTotalPoints.toLocaleString()}`;
+            document.getElementById('userPointsDisplay').textContent = `Your Points: ${parseInt(userPoints).toLocaleString()}`;
+
+            const tableBody = document.querySelector('#valuationTable tbody');
+            tableBody.innerHTML = ''; // Clear previous results
+
+            valuations.forEach(valuation => {
+                const userTokenAllocation = (userPoints / currentTotalPoints) * tokenSupplyForTradingPoints;
+                const dollarValue = (userTokenAllocation / totalTokenSupply) * valuation;
+
+                const row = tableBody.insertRow();
+                const valuationCell = row.insertCell(0);
+                const valueCell = row.insertCell(1);
+
+                valuationCell.textContent = valuation >= 1000000000 ? 
+                    `$${(valuation / 1000000000).toFixed(1)}B` : 
+                    `$${(valuation / 1000000).toFixed(0)}M`;
+                valueCell.textContent = `$${dollarValue.toFixed(2)}`;
+            });
+        }
+
+        function createSnowflakes(num) {
+            for (let i = 0; i < num; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.style.left = `${Math.random() * 100}vw`;
+                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                snowflake.style.animationDelay = `${Math.random() * 5}s`;
+                document.body.appendChild(snowflake);
+            }
+        }
+
+        createSnowflakes(50);
+        calculateValues(); // Automatically calculate values on load
+    </script>
 </body>
 </html>
