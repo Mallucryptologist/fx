@@ -19,6 +19,20 @@
     0% { background-position: 0 0; }
     100% { background-position: 100% 100%; }
 }
+@keyframes neonBorder {
+    0% {
+        border-color: #00FF00;
+        box-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 40px #00FF00;
+    }
+    50% {
+        border-color: #FF00FF;
+        box-shadow: 0 0 5px #FF00FF, 0 0 10px #FF00FF, 0 0 20px #FF00FF, 0 0 40px #FF00FF;
+    }
+    100% {
+        border-color: #00FF00;
+        box-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 40px #00FF00;
+    }
+}
 body {
     margin: 0;
     padding: 0;
@@ -32,6 +46,8 @@ body {
     align-items: center;
     height: 100vh;
     flex-direction: column;
+}
+body.animate-bg {
     animation: moveBackground 30s linear infinite;
 }
 input {
@@ -63,6 +79,17 @@ button {
 .results p {
     margin: 5px 0;
 }
+.results table {
+    width: 100%;
+    border-collapse: collapse;
+    animation: neonBorder 2s infinite;
+}
+.results th, .results td {
+    border: 2px solid;
+    padding: 10px;
+    text-align: left;
+    animation: neonBorder 2s infinite;
+}
 .snowflake {
     position: fixed;
     top: -10px;
@@ -79,13 +106,3 @@ button {
         opacity: 0;
     }
 }
-
-</head>
-<body>
-    <h1>Polynomial Points Checker</h1>
-    <input type="number" id="userPoints" placeholder="Enter your points" value="10000">
-    <button onclick="calculateValues()">Check Value</button>
-    
-    <div class="results" id="results">
-        <p id="circulationPoints">Current Circulation Points: </p>
-    </div>
