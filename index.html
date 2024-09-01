@@ -4,17 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Polynomial Points Checker</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>Polynomial Points Checker</h1>
-    <input type="number" id="userPoints" placeholder="Enter your points" value="10000">
-    <button onclick="calculateValues()">Check Value</button>
-    
-    <div class="results" id="results">
-        <p id="circulationPoints">Current Circulation Points: 9000000</p>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #00FF00;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        input {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #333;
+            color: #00FF00;
+            border: 1px solid #00FF00;
+            border-radius: 5px;
+            width: 200px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #333;
+            color: #00FF00;
+            border: 1px solid #00FF00;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 200px;
+        }
+        .results {
+            margin-top: 20px;
+            text-align: left;
+            padding: 0 20px;
+        }
+        .results p {
+            margin: 5px 0;
+        }
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            width: 12px;
+            height: 12px;
+            background-color: #FFF;
+            border-radius: 50%;
+            animation: fall 5s linear infinite;
+            opacity: 0.8;
+        }
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
