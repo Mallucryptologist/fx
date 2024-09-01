@@ -6,91 +6,125 @@
     <title>Polynomial Points Checker</title>
     <style>
         body {
-            background-color: black;
-            color: green;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #00FF00;
             font-family: Arial, sans-serif;
-            text-align: center;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        input {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #333;
+            color: #00FF00;
+            border: 1px solid #00FF00;
+            border-radius: 5px;
+            width: 200px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #333;
+            color: #00FF00;
+            border: 1px solid #00FF00;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 200px;
+        }
+        .results {
+            margin-top: 20px;
+            text-align: left;
+            padding: 0 20px;
+        }
+        .results p {
+            margin: 5px 0;
         }
         .snowflake {
-            position: absolute;
-            top: 0;
-            z-index: 9999;
-            user-select: none;
-            pointer-events: none;
-            color: white;
+            position: fixed;
+            top: -10px;
+            width: 12px;
+            height: 12px;
+            background-color: #FFF;
+            border-radius: 50%;
+            animation: fall 5s linear infinite;
+            opacity: 0.8;
         }
         @keyframes fall {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(100vh); }
-        }
-        .table-container {
-            border: 2px solid neon;
-            padding: 20px;
-            margin: 20px auto;
-            width: 80%;
-            animation: neon-border 2s infinite;
-        }
-        @keyframes neon-border {
-            0%, 100% { border-color: green; }
-            50% { border-color: lime; }
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
     <h1>Polynomial Points Checker</h1>
-    <p>Total Points: <span id="total-points">9000000</span></p>
-    <p>Enter your points: <input type="number" id="user-points" /></p>
-    <button onclick="calculateValue()">Calculate Value</button>
-    <div id="result"></div>
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Valuation</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody id="valuation-table">
-                <!-- Valuation rows will be inserted here -->
-            </tbody>
-        </table>
+    <input type="number" id="userPoints" placeholder="Enter your points" value="10000">
+    <button onclick="calculateValues()">Check Value</button>
+    
+    <div class="results" id="results">
+        <p id="circulationPoints">Current Circulation Points: </p>
     </div>
+
     <script>
-        const valuations = [50e6, 75e6, 100e6, 250e6, 500e6, 1e9, 2e9];
-        const totalPointsElement = document.getElementById('total-points');
-        const userPointsInput = document.getElementById('user-points');
-        const resultElement = document.getElementById('result');
-        const valuationTable = document.getElementById('valuation-table');
+        const initialPoints = 9000000;
+        const dailyIncrement = 1000000;
+        const totalTokenSupply = 1000000000;  // 1 billion tokens
+        const tokenSupplyForTradingPoints = 0.025 * totalTokenSupply;  // 2.5% of total supply = 25 million tokens
+        const valuations = [50000000, 75000000, 100000000, 250000000, 500000000, 1000000000, 2000000000];
+        const startTime = new Date().setUTCHours(14, 0, 0, 0); // 2 PM UTC start time
 
-        function calculateValue() {
-            const userPoints = parseFloat(userPointsInput.value);
-            if (isNaN(userPoints)) {
-                resultElement.textContent = 'Please enter a valid number of points.';
-                return;
-            }
-            valuationTable.innerHTML = '';
+        // Function to calculate the total points based on days passed
+        function updateCurrentPoints() {
+            const now = new Date();
+            const daysPassed = Math.floor((now - startTime) / (24 * 60 * 60 * 1000));
+            return initialPoints + (daysPassed * dailyIncrement);
+        }
+
+        // Function to calculate and display the dollar value of points at different valuations
+        function calculateValues() {
+            const userPoints = document.getElementById('userPoints').value;
+            const currentTotalPoints = updateCurrentPoints();
+            const circulationPointsElement = document.getElementById('circulationPoints');
+            
+            circulationPointsElement.textContent = `Current Circulation Points: ${currentTotalPoints}`;
+
+            let resultHTML = `<p>Your Points: ${userPoints}</p>`;
+            
             valuations.forEach(valuation => {
-                const value = (1e9 / userPoints) * valuation;
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>$${(valuation / 1e6).toFixed(1)}M</td><td>$${value.toFixed(2)}</td>`;
-                valuationTable.appendChild(row);
+                // User's token allocation
+                const userTokenAllocation = (userPoints / currentTotalPoints) * tokenSupplyForTradingPoints;
+                // Dollar value based on valuation
+                const dollarValue = (userTokenAllocation / totalTokenSupply) * valuation;
+                resultHTML += `<p>At $${(valuation / 1000000).toFixed(0)}M valuation: $${dollarValue.toFixed(2)}</p>`;
             });
+            
+            document.getElementById('results').innerHTML += resultHTML;
         }
 
-        // Snowflake animation
-        function createSnowflake() {
-            const snowflake = document.createElement('div');
-            snowflake.className = 'snowflake';
-            snowflake.textContent = '❄';
-            snowflake.style.left = `${Math.random() * 100}vw`;
-            snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
-            snowflake.style.fontSize = `${Math.random() * 10 + 10}px`;
-            document.body.appendChild(snowflake);
-            setTimeout(() => {
-                snowflake.remove();
-            }, 5000);
+        // Function to create snowflake animation
+        function createSnowflakes(num) {
+            for (let i = 0; i < num; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.style.left = `${Math.random() * 100}vw`;
+                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                snowflake.style.animationDelay = `${Math.random() * 5}s`;
+                document.body.appendChild(snowflake);
+            }
         }
-        setInterval(createSnowflake, 100);
+
+        createSnowflakes(50);
+        updateCurrentPoints(); // Update points immediately on load
+        calculateValues(); // Automatically calculate values on load
     </script>
 </body>
 </html>
