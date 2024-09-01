@@ -30,7 +30,7 @@ function calculateValues() {
         resultHTML += `<p>At $${(valuation / 1000000).toFixed(0)}M valuation: $${dollarValue.toFixed(2)}</p>`;
     });
     
-    document.getElementById('results').innerHTML += resultHTML;
+    document.getElementById('results').innerHTML = resultHTML; // Clear previous results and add new results
 }
 
 // Function to create snowflake animation
@@ -48,6 +48,3 @@ function createSnowflakes(num) {
 createSnowflakes(50);
 updateCurrentPoints(); // Update points immediately on load
 calculateValues(); // Automatically calculate values on load
-</script>
-</body>
-</html>
