@@ -4,16 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Polynomial Points Checker</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-color: black;
+            color: green;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .snowflake {
+            position: absolute;
+            top: 0;
+            z-index: 9999;
+            user-select: none;
+            pointer-events: none;
+            color: white;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
+        .table-container {
+            border: 2px solid neon;
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            animation: neon-border 2s infinite;
+        }
+        @keyframes neon-border {
+            0%, 100% { border-color: green; }
+            50% { border-color: lime; }
+        }
+    </style>
 </head>
 <body>
     <h1>Polynomial Points Checker</h1>
-    <input type="number" id="userPoints" placeholder="Enter your points" value="10000">
-    <button onclick="calculateValues()">Check Value</button>
-    
-    <div class="results" id="results">
-        <p id="circulationPoints">Current Circulation Points: </p>
+    <p>Total Points: <span id="total-points">9000000</span></p>
+    <p>Enter your points: <input type="number" id="user-points" /></p>
+    <button onclick="calculateValue()">Calculate Value</button>
+    <div id="result"></div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Valuation</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody id="valuation-table">
+                <!-- Valuation rows will be inserted here -->
+            </tbody>
+        </table>
     </div>
+    <script>
+        const valuations = [50e6, 75e6, 100e6, 250e6, 500e6, 1e9, 2e9];
+        const totalPointsElement = document.getElementById('total-points');
+        const userPointsInput = document.getElementById('user-points');
+        const resultElement = document.getElementById('result');
+        const valuationTable = document.getElementById('valuation-table');
+
+        function calculateValue() {
+            const userPoints = parseFloat(userPointsInput.value);
+            if (isNaN(userPoints)) {
+                resultElement.textContent = 'Please enter a valid number of points.';
+                return;
+            }
+            valuationTable.innerHTML = '';
+            valuations.forEach(valuation => {
+                const value = (1e9 / userPoints) * valuation;
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>$${(valuation / 1e6).toFixed(1)}M</td><td>$${value.toFixed(2)}</td>`;
+                valuationTable.appendChild(row);
+            });
+        }
+
+        // Snowflake animation
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.className = 'snowflake';
+            snowflake.textContent = '❄';
+            snowflake.style.left = `${Math.random() * 100}vw`;
+            snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            snowflake.style.fontSize = `${Math.random() * 10 + 10}px`;
+            document.body.appendChild(snowflake);
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+        setInterval(createSnowflake, 100);
+    </script>
 </body>
 </html>
-
