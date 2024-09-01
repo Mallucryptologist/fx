@@ -4,106 +4,106 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Polynomial Points Checker</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-            color: #00FF00;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            flex-direction: column;
+   <style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+        color: #00FF00;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+    }
+    input {
+        margin: 10px;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #000;
+        color: #00FF00;
+        border: 1px solid #00FF00;
+        border-radius: 5px;
+        width: 200px;
+    }
+    button {
+        margin: 10px;
+        padding: 10px;
+        font-size: 16px;
+        background-color: #000;
+        color: #00FF00;
+        border: 1px solid #00FF00;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 200px;
+    }
+    .results {
+        margin-top: 20px;
+        text-align: left;
+        padding: 0 20px;
+    }
+    .results p {
+        margin: 5px 0;
+    }
+    .snowflake {
+        position: fixed;
+        top: -10px;
+        width: 12px;
+        height: 12px;
+        background-color: #FFF;
+        border-radius: 50%;
+        animation: fall 5s linear infinite;
+        opacity: 0.8;
+    }
+    @keyframes fall {
+        to {
+            transform: translateY(100vh);
+            opacity: 0;
         }
-        input {
-            margin: 10px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #333;
-            color: #00FF00;
-            border: 1px solid #00FF00;
-            border-radius: 5px;
-            width: 200px;
-        }
-        button {
-            margin: 10px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #333;
-            color: #00FF00;
-            border: 1px solid #00FF00;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 200px;
-        }
-        .results {
-            margin-top: 20px;
-            text-align: left;
-            padding: 0 20px;
-        }
-        .results p {
-            margin: 5px 0;
-        }
-        .snowflake {
-            position: fixed;
-            top: -10px;
-            width: 12px;
-            height: 12px;
-            background-color: #FFF;
-            border-radius: 50%;
-            animation: fall 5s linear infinite;
-            opacity: 0.8;
-        }
-        @keyframes fall {
-            to {
-                transform: translateY(100vh);
-                opacity: 0;
-            }
-        }
-        .table-container {
-            position: relative;
-            padding: 3px;
-            background: #00FF00;
-            background-clip: padding-box;
-            border: solid 5px transparent;
-            border-radius: 10px;
-        }
-        .table-container::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            z-index: -1;
-            margin: -5px;
-            border-radius: inherit;
-            background: linear-gradient(
-                45deg,
-                #00FF00, #00FFFF, #0000FF, #FF00FF, #FF0000, #FFFF00, #00FF00
-            );
-            background-size: 400% 400%;
-            animation: gradientMove 15s ease infinite;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #000;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #00FF00;
-        }
-        th {
-            background-color: #333;
-        }
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-    </style>
+    }
+    .table-container {
+        position: relative;
+        padding: 3px;
+        background: #000;
+        background-clip: padding-box;
+        border: solid 5px transparent;
+        border-radius: 10px;
+    }
+    .table-container::before {
+        content: '';
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        z-index: -1;
+        margin: -5px;
+        border-radius: inherit;
+        background: linear-gradient(
+            45deg,
+            #00FF00, #00FFFF, #0000FF, #FF00FF, #FF0000, #FFFF00, #00FF00
+        );
+        background-size: 400% 400%;
+        animation: gradientMove 15s ease infinite;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #000;
+    }
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #00FF00;
+    }
+    th {
+        background-color: #000;
+    }
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+</style>
 </head>
 <body>
     <h1>Polynomial Points Checker</h1>
@@ -129,7 +129,57 @@
     </div>
 
     <script>
-        // ... (JavaScript remains the same as in the previous response) ...
-    </script>
+    const initialPoints = 10000000; // Updated to 10 million
+    const dailyIncrement = 1000000;
+    const totalTokenSupply = 1000000000;  // 1 billion tokens
+    const tokenSupplyForTradingPoints = 0.025 * totalTokenSupply;  // 2.5% of total supply = 25 million tokens
+    const valuations = [50000000, 75000000, 100000000, 250000000, 500000000, 1000000000, 2000000000];
+    const startTime = new Date('2023-05-02T14:00:00Z').getTime(); // Set to a specific date, 2 PM UTC
+
+    function updateCurrentPoints() {
+        const now = new Date();
+        const daysPassed = Math.floor((now.getTime() - startTime) / (24 * 60 * 60 * 1000));
+        return initialPoints + (daysPassed * dailyIncrement);
+    }
+
+    function calculateValues() {
+        const userPoints = document.getElementById('userPoints').value;
+        const currentTotalPoints = updateCurrentPoints();
+        
+        document.getElementById('circulationPoints').textContent = `Current Circulation Points: ${currentTotalPoints.toLocaleString()}`;
+        document.getElementById('userPointsDisplay').textContent = `Your Points: ${parseInt(userPoints).toLocaleString()}`;
+
+        const tableBody = document.querySelector('#valuationTable tbody');
+        tableBody.innerHTML = ''; // Clear previous results
+
+        valuations.forEach(valuation => {
+            const userTokenAllocation = (userPoints / currentTotalPoints) * tokenSupplyForTradingPoints;
+            const dollarValue = (userTokenAllocation / totalTokenSupply) * valuation;
+
+            const row = tableBody.insertRow();
+            const valuationCell = row.insertCell(0);
+            const valueCell = row.insertCell(1);
+
+            valuationCell.textContent = valuation >= 1000000000 ? 
+                `$${(valuation / 1000000000).toFixed(1)}B` : 
+                `$${(valuation / 1000000).toFixed(0)}M`;
+            valueCell.textContent = `$${dollarValue.toFixed(2)}`;
+        });
+    }
+
+    function createSnowflakes(num) {
+        for (let i = 0; i < num; i++) {
+            const snowflake = document.createElement('div');
+            snowflake.className = 'snowflake';
+            snowflake.style.left = `${Math.random() * 100}vw`;
+            snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            snowflake.style.animationDelay = `${Math.random() * 5}s`;
+            document.body.appendChild(snowflake);
+        }
+    }
+
+    createSnowflakes(50);
+    calculateValues(); // Automatically calculate values on load
+</script>
 </body>
 </html>
