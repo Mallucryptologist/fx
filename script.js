@@ -3,24 +3,18 @@ const dailyIncrement = 1000000;
 const totalTokenSupply = 1000000000;  // 1 billion tokens
 const tokenSupplyForTradingPoints = 0.025 * totalTokenSupply;  // 2.5% of total supply = 25 million tokens
 const valuations = [50000000, 75000000, 100000000, 250000000, 500000000, 1000000000, 2000000000];
-const startTime = new Date(Date.UTC(2023, 0, 1, 14, 0, 0)); // 2 PM UTC start time on January 1, 2023
+const startTime = new Date().setUTCHours(14, 0, 0, 0); // 2 PM UTC start time
 
 // Function to calculate the total points based on days passed
 function updateCurrentPoints() {
     const now = new Date();
     const daysPassed = Math.floor((now - startTime) / (24 * 60 * 60 * 1000));
-    console.log(`Days passed: ${daysPassed}`); // Debugging line
     return initialPoints + (daysPassed * dailyIncrement);
 }
 
 // Function to calculate and display the dollar value of points at different valuations
 function calculateValues() {
-    const userPoints = parseInt(document.getElementById('userPoints').value);
-    if (isNaN(userPoints)) {
-        console.error("Invalid user points"); // Debugging line
-        return;
-    }
-
+    const userPoints = document.getElementById('userPoints').value;
     const currentTotalPoints = updateCurrentPoints();
     const circulationPointsElement = document.getElementById('circulationPoints');
     
@@ -36,7 +30,7 @@ function calculateValues() {
         resultHTML += `<p>At $${(valuation / 1000000).toFixed(0)}M valuation: $${dollarValue.toFixed(2)}</p>`;
     });
     
-    document.getElementById('results').innerHTML = resultHTML;
+    document.getElementById('results').innerHTML += resultHTML;
 }
 
 // Function to create snowflake animation
@@ -52,4 +46,8 @@ function createSnowflakes(num) {
 }
 
 createSnowflakes(50);
-document.getElementById('circulationPoints').textContent = `Current Circulation Points: ${updateCurrentPoints()}`;
+updateCurrentPoints(); // Update points immediately on load
+calculateValues(); // Automatically calculate values on load
+</script>
+</body>
+</html>
