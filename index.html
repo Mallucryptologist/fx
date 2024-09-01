@@ -127,19 +127,16 @@
             </table>
         </div>
     </div>
-
-    <script>
+<script>
     const initialPoints = 10000000; // 10 million
     const dailyIncrement = 1000000;
     const totalTokenSupply = 1000000000;  // 1 billion tokens
     const tokenSupplyForTradingPoints = 0.025 * totalTokenSupply;  // 2.5% of total supply = 25 million tokens
     const valuations = [50000000, 75000000, 100000000, 250000000, 500000000, 1000000000, 2000000000];
-    const startTime = new Date('2023-05-02T14:00:00Z').getTime(); // Set to a specific date, 2 PM UTC
+    const startTime = new Date().setUTCHours(14, 0, 0, 0); // Today at 2 PM UTC
 
     function updateCurrentPoints() {
-        const now = new Date();
-        const daysPassed = Math.floor((now.getTime() - startTime) / (24 * 60 * 60 * 1000));
-        return initialPoints + (daysPassed * dailyIncrement);
+        return initialPoints; // Always return 10 million
     }
 
     function calculateValues() {
@@ -148,7 +145,7 @@
         const currentTotalPoints = updateCurrentPoints();
         
         document.getElementById('userPointsDisplay').textContent = `Your Points: ${userPoints.toLocaleString()}`;
-        document.getElementById('circulationPoints').textContent = `Current Circulating Points: ${currentTotalPoints.toLocaleString()}`;
+        document.getElementById('circulationPoints').textContent = `Current Circulation Points: ${currentTotalPoints.toLocaleString()}`;
 
         const tableBody = document.querySelector('#valuationTable tbody');
         tableBody.innerHTML = ''; // Clear previous results
@@ -181,16 +178,17 @@
 
     function updateCirculatingPoints() {
         const currentTotalPoints = updateCurrentPoints();
-        document.getElementById('circulationPoints').textContent = `Current Circulating Points: ${currentTotalPoints.toLocaleString()}`;
+        document.getElementById('circulationPoints').textContent = `Current Circulation Points: ${currentTotalPoints.toLocaleString()}`;
     }
 
-    // Initialization
     createSnowflakes(50);
+    updateCirculatingPoints(); // Update circulating points on load
+    setInterval(updateCirculatingPoints, 60000); // Update circulating points every minute
+
+    // Initialize with zero points
     document.getElementById('userPoints').value = '';
     document.getElementById('userPointsDisplay').textContent = 'Your Points: 0';
-    updateCirculatingPoints();
     calculateValues();
-    setInterval(updateCirculatingPoints, 60000); // Update circulating points every minute
 </script>
 </body>
 </html>
