@@ -127,8 +127,7 @@
             </table>
         </div>
     </div>
-
-    <script>
+<script>
     const initialPoints = 10000000; // 10 million
     const dailyIncrement = 1000000;
     const totalTokenSupply = 1000000000;  // 1 billion tokens
@@ -149,10 +148,11 @@
     }
 
     function calculateValues() {
-        const userPoints = document.getElementById('userPoints').value;
+        const userPointsInput = document.getElementById('userPoints');
+        const userPoints = userPointsInput.value ? parseInt(userPointsInput.value) : 0;
         const currentTotalPoints = updateCurrentPoints();
         
-        document.getElementById('userPointsDisplay').textContent = `Your Points: ${parseInt(userPoints).toLocaleString()}`;
+        document.getElementById('userPointsDisplay').textContent = `Your Points: ${userPoints.toLocaleString()}`;
         document.getElementById('circulatingPoints').textContent = `Current Circulating Points: ${currentTotalPoints.toLocaleString()}`;
 
         const tableBody = document.querySelector('#valuationTable tbody');
@@ -190,9 +190,13 @@
     }
 
     createSnowflakes(50);
-    calculateValues(); // Automatically calculate values on load
     updateCirculatingPoints(); // Update circulating points on load
     setInterval(updateCirculatingPoints, 60000); // Update circulating points every minute
+
+    // Initialize with zero points
+    document.getElementById('userPoints').value = '';
+    document.getElementById('userPointsDisplay').textContent = 'Your Points: 0';
+    calculateValues();
 </script>
 </body>
 </html>
